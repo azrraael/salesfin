@@ -13,6 +13,7 @@ namespace Sales.API.Data
         }
 
         public DbSet<City> Cities { get; set; }
+
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<State> States { get; set; }
