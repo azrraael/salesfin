@@ -1,14 +1,13 @@
-﻿
-@page "/countries/details/{Id:int}"
-@using System.Net;
+﻿@page "/countries/details/{Id:int}"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
 
-@if(country is null)
+@if (country is null)
 {
     <p>Cargando...</p>
-} else
+}
+else
 {
     <h3>@country.Name</h3>
 
@@ -25,6 +24,10 @@
             <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync">Limpiar</button>
         </div>
     </div>
+
+    <Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPageAsync" />
 
     <GenericList MyList="states">
         <Body>
