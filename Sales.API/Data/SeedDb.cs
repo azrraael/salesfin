@@ -1,4 +1,5 @@
-﻿using Sales.API.Helpers;
+﻿using Microsoft.EntityFrameworkCore;
+using Sales.API.Helpers;
 using Sales.Shared.Entities;
 using Sales.Shared.Enums;
 
@@ -28,6 +29,12 @@ namespace Sales.API.Data
             var user = await _userHelper.GetUserAsync(email);
             if (user == null)
             {
+                var city = await _context.Cities.FirstOrDefaultAsync(x => x.Name == "Medellín");
+                if (city == null)
+                {
+                    city = await _context.Cities.FirstOrDefaultAsync();
+                }
+
                 user = new User
                 {
                     FirstName = firstName,
@@ -40,9 +47,12 @@ namespace Sales.API.Data
                     City = _context.Cities.FirstOrDefault(),
                     UserType = userType,
                 };
-
                 await _userHelper.AddUserAsync(user, "123456");
                 await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
+
             }
 
             return user;
